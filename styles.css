@@ -1,0 +1,313 @@
+/* ===================================================
+   1. CORES E VARIÁVEIS GERAIS
+   Mude os valores aqui para ajustar o tema inteiro.
+   =================================================== */
+:root {
+  --fundo: #062b2a;     /* fundo de toda a página */
+  --painel:#0b403b;    /* fundo dos cartões e painéis */
+  --borda: #1b6b5f;     /* bordas neutras (menu, campos de login) */
+  --texto: #e8fff4;     /* cor do texto principal */
+  --suave: #a6dccb;     /* texto secundário, menos destaque */
+
+  --verde:  #39ff88;     /* verde neon: usado no menu, na logo e nos botões de ação */
+  --ciano:  #4dd8ff;     /* ciano neon: usado na senha SE (exames) */
+  --rosa:   #ff5c9a;      /* rosa neon: usado na senha SP (prioritária) e em erros */
+  --amarelo:#ffe066;   /* amarelo neon: usado na senha SG (geral) */
+}
+
+/* Reset simples */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font: 1.125rem/1.5 "Atkinson Hyperlegible", system-ui, sans-serif;
+}
+
+/* Títulos, números de senha e nome do sistema usam a fonte Sora */
+h1, h2, .num, .logo, .tipo strong {
+  font-family: Sora, system-ui, sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+
+/* Contorno de foco ao navegar pelo teclado (acessibilidade) */
+:focus-visible {
+  outline: 3px solid var(--ciano);
+  outline-offset: 3px;
+}
+
+/* Link "Ir para o conteúdo": só aparece quando focado via Tab */
+.pular {
+  position: absolute;
+  left: -999px;
+}
+.pular:focus {
+  left: 1rem;
+  top: 1rem;
+  background: var(--verde);
+  color: var(--fundo);
+  padding: 0.5rem 1rem;
+  z-index: 9;
+}
+
+/* ===================================================
+   2. CABEÇALHO (logo, menu, caixa de demonstração)
+   =================================================== */
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--borda);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--verde);
+  text-shadow: 0 0 12px var(--verde); /* brilho neon da logo */
+}
+
+nav {
+  display: flex;
+  gap: 0.5rem;
+}
+nav a {
+  color: var(--suave);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+nav a.active {
+  color: var(--verde);
+  border-color: var(--verde);
+  box-shadow: 0 0 12px #39ff8866; /* brilho do item de menu ativo */
+}
+
+.demo {
+  margin-left: auto;
+  font-size: 0.95rem;
+  color: var(--suave);
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ===================================================
+   3. CAIXAS DE TIPO DE SENHA (Totem)
+   Cada tipo de senha (SP, SG, SE) define sua própria
+   cor através da variável --cor. Tudo dentro da caixa
+   (borda, título, número, brilho) usa essa variável.
+   =================================================== */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.tipo-SP { --cor: var(--rosa); }     /* senha prioritária */
+.tipo-SG { --cor: var(--amarelo); }  /* senha geral */
+.tipo-SE { --cor: var(--ciano); }    /* senha de exames */
+
+button.tipo {
+  text-align: left;
+  padding: 1.75rem;
+  min-height: 180px;
+  background: var(--painel);
+  color: var(--texto);
+  border: 2px solid var(--cor);
+  border-radius: 20px;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--cor) 45%, transparent);
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.2s ease, background 0.2s ease; /* ultima linha add */
+}
+button.tipo:hover {
+  background: #0f5249;
+  transform: translateY(-4px);               /* a caixa "sobe" um pouco */
+  animation: pulso-hover 1.4s ease-in-out infinite; /* brilho pulsando */
+}
+.tipo strong {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--cor);
+  margin-bottom: 0.5rem;
+}
+.fila {
+  display: block;
+  margin-top: 1rem;
+  color: var(--suave);
+}
+
+/* ===================================================
+   4. CARTÃO DE SENHA (Totem) E CHAMADA ATUAL (Painel)
+   Também usam a variável --cor definida pelo tipo.
+   =================================================== */
+.ticket, .atual {
+  background: var(--painel);
+  border: 2px dashed var(--cor);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  margin: 1.5rem 0;
+}
+.ticket p, .atual p {
+  margin: 0.25rem 0;
+  color: var(--suave);
+}
+.num {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--cor);
+}
+
+.atual {
+  border-style: solid;
+  text-align: center;
+  box-shadow: 0 0 30px color-mix(in srgb, var(--cor) 45%, transparent);
+}
+.atual .num {
+  font-size: clamp(2.5rem, 9vw, 5.5rem); /* número grande e responsivo */
+}
+.guiche {
+  font: 700 2rem Sora, sans-serif;
+  color: var(--texto) !important;
+}
+
+/* ===================================================
+   5. HISTÓRICO DE CHAMADAS (Painel)
+   =================================================== */
+.hist {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.hist li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: var(--painel);
+  border-left: 6px solid var(--cor);
+  border-radius: 12px;
+}
+.hist .num {
+  font-size: 1.4rem;
+}
+
+/* ===================================================
+   6. BOTÕES DE AÇÃO (tela do Atendente)
+   =================================================== */
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.acao {
+  font: inherit;
+  padding: 0.8rem 1.4rem;
+  border-radius: 12px;
+  border: 2px solid var(--verde);
+  background: transparent;
+  color: var(--verde);
+  cursor: pointer;
+  transition: transform 0.15s ease; /* adicione esta linha ao .acao original */
+}
+.acao:hover:not(:disabled) {
+  background: var(--verde);
+  color: var(--fundo);
+}
+.acao:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* botão de ação de risco (ex.: "Cliente não compareceu") */
+.perigo {
+  border-color: var(--rosa);
+  color: var(--rosa);
+}
+.perigo:hover:not(:disabled) {
+  background: var(--rosa);
+  color: var(--fundo);
+}
+
+.link {
+  font: inherit;
+  background: none;
+  border: 0;
+  color: var(--ciano);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ===================================================
+   7. TELA DE LOGIN (Atendente)
+   =================================================== */
+.login {
+  display: grid;
+  gap: 1rem;
+  max-width: 380px;
+}
+.login label {
+  display: grid;
+  gap: 0.3rem;
+}
+input, select {
+  font: inherit;
+  padding: 0.7rem;
+  border-radius: 10px;
+  border: 2px solid var(--borda);
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+/* Mensagens de erro (login, totem, atendente) */
+.erro {
+  color: #ffd0e0;
+  background: #3a1030;
+  border-left: 4px solid var(--rosa);
+  padding: 0.6rem 1rem;
+}
+
+/* ===================================================
+   8. ANIMAÇÃO DO PAINEL
+   Pulso de brilho no número chamado. Respeita quem
+   prefere menos movimento na tela (acessibilidade).
+   =================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .atual .num {
+    animation: pulso 2.4s ease-in-out 3;
+  }
+}
+@keyframes pulso {
+  50% {
+    text-shadow: 0 0 28px var(--cor);
+  }
+}
+
+
+/* Pulso de brilho ao passar o mouse */
+@keyframes pulso-hover {
+  0%, 100% { box-shadow: 0 0 18px color-mix(in srgb, var(--cor) 45%, transparent); }
+  50%      { box-shadow: 0 0 34px color-mix(in srgb, var(--cor) 80%, transparent); }
+}
