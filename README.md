@@ -10,7 +10,7 @@ O cliente retira uma senha no totem, acompanha a chamada no painel e o atendente
 |------|-----------|-------|
 | _Davi Henrique_ | _24009979_ | Scrum Master |
 | _Igor Santos_ | _01815246_ | Documentador |
-| _Lucas Jose_ | _01815708_ | Desenvolvedor |
+| _Lucas Jose_ | _01815708_ | Desenvolvedor | Documentador |
 | _Pedro vieira_ | _01679503_ | Testador |
 
 ## Tecnologias
