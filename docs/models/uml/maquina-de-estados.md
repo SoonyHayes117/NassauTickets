@@ -1,0 +1,15 @@
+# Máquina de estados da senha
+
+```mermaid
+stateDiagram-v2
+    [*] --> EMITIDA
+    EMITIDA --> AGUARDANDO
+    AGUARDANDO --> CHAMADA
+    CHAMADA --> CHAMADA_NOVAMENTE
+    CHAMADA --> EM_ATENDIMENTO
+    CHAMADA_NOVAMENTE --> EM_ATENDIMENTO
+    CHAMADA_NOVAMENTE --> NÃO_COMPARECEU
+    EM_ATENDIMENTO --> ATENDIDA
+    ATENDIDA --> [*]
+    NÃO_COMPARECEU --> [*]
+```
